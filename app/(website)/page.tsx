@@ -128,20 +128,16 @@ export default function HomePage() {
                     </div>
 
                     {/* Content Grid */}
-                    <div className="grid lg:grid-cols-5 gap-10 items-start">
-                        {/* Left — Image */}
-                        <div className="lg:col-span-2">
+                    <div className="flex flex-col lg:flex-row gap-10 items-start">
+                        {/* Left — Image (30%) */}
+                        <div className="lg:w-[35%] flex-shrink-0">
                             <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                                <Image src="/photos/Hospital.jpeg" alt="R.C. Eye & Dental Hospital Bijnor – Trusted Healthcare Since 2004" width={600} height={700} className="w-full object-cover aspect-[3/4]" />
-                                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                                    <div className="text-white text-3xl font-bold">20+</div>
-                                    <div className="text-white/70 text-sm">Years Serving Bijnor</div>
-                                </div>
+                                <Image src="/photos/rchospital.png" alt="R.C. Eye & Dental Hospital Bijnor – Trusted Healthcare Since 2004" width={600} height={700} className="w-full object-contain" />
                             </div>
                         </div>
 
                         {/* Right — Text + Trust */}
-                        <div className="lg:col-span-3">
+                        <div className="lg:w-[65%]">
                             <p className="text-gray-600 text-[15px] leading-[1.8] mb-5">
                                 R.C. Eye & Dental Hospital is one of the trusted healthcare institutions in Bijnor, committed to providing advanced eye and dental care with modern technology, experienced specialists, and a patient-first approach. Our mission is to help every patient achieve better vision, healthier smiles, and improved quality of life through accurate diagnosis and effective treatment.
                             </p>
