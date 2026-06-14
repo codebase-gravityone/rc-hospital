@@ -69,7 +69,7 @@ export default function Navbar() {
                 <nav className="hidden lg:flex items-center gap-1">
                     {links.map((l) => l.children ? (
                         <div key={l.href} className="relative group">
-                            <button className={`flex items-center gap-1 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${solid ? (pathname.startsWith(l.href) ? "text-emerald-400 bg-white/10" : "text-white/80 hover:text-white hover:bg-white/10") : (pathname.startsWith(l.href) ? "text-emerald-400 bg-white/10" : "text-white/70 hover:text-white hover:bg-white/10")}`}>
+                            <button className={`flex items-center gap-1 px-4 py-2 text-[13px] font-medium transition-all ${solid ? (pathname.startsWith(l.href) ? "text-emerald-400 border-b-2 border-emerald-400" : "text-white/70 hover:text-white border-b-2 border-transparent hover:border-white/50") : (pathname.startsWith(l.href) ? "text-emerald-400 border-b-2 border-emerald-400" : "text-white/60 hover:text-white border-b-2 border-transparent hover:border-white/40")}`}>
                                 {l.label}<ChevronDown className="w-3 h-3 ml-0.5 transition-transform group-hover:rotate-180" />
                             </button>
                             {/* Mega Menu */}
@@ -97,7 +97,7 @@ export default function Navbar() {
                             </div>
                         </div>
                     ) : (
-                        <Link key={l.href} href={l.href} className={`px-4 py-2 rounded-full text-[13px] font-medium transition-all ${solid ? (pathname === l.href ? "text-emerald-400 bg-white/10" : "text-white/80 hover:text-white hover:bg-white/10") : (pathname === l.href ? "text-emerald-400 bg-white/10" : "text-white/70 hover:text-white hover:bg-white/10")}`}>{l.label}</Link>
+                        <Link key={l.href} href={l.href} className={`px-4 py-2 text-[13px] font-medium transition-all ${solid ? (pathname === l.href ? "text-emerald-400 border-b-2 border-emerald-400" : "text-white/70 hover:text-white border-b-2 border-transparent hover:border-white/50") : (pathname === l.href ? "text-emerald-400 border-b-2 border-emerald-400" : "text-white/60 hover:text-white border-b-2 border-transparent hover:border-white/40")}`}>{l.label}</Link>
                     ))}
                 </nav>
 
