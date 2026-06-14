@@ -19,10 +19,42 @@ export function generateStaticParams() { return Object.keys(data).map(slug => ({
 
 export default async function ServicePage({ params }: Props) {
     const { slug } = await params; const s = data[slug]; if (!s) notFound();
+
+    // FAQ Schema for rich snippets
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": s.faqs.map(f => ({
+            "@type": "Question",
+            "name": f.q,
+            "acceptedAnswer": { "@type": "Answer", "text": f.a }
+        }))
+    };
+
+    // Breadcrumb Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://rceyebijnor.com" },
+            { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://rceyebijnor.com/services" },
+            { "@type": "ListItem", "position": 3, "name": s.title, "item": `https://rceyebijnor.com/services/${slug}` },
+        ]
+    };
+
     return (
         <>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
             <section className="pt-32 pb-16 bg-gray-50"><div className="max-w-7xl mx-auto px-6">
-                <Link href="/services" className="inline-flex items-center gap-2 text-gray-500 text-sm hover:text-[#1a5f3a] mb-6 transition-colors"><ArrowLeft className="w-4 h-4" />All Services</Link>
+                {/* Breadcrumbs */}
+                <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+                    <Link href="/" className="hover:text-[#1a5f3a]">Home</Link>
+                    <span>/</span>
+                    <Link href="/services" className="hover:text-[#1a5f3a]">Services</Link>
+                    <span>/</span>
+                    <span className="text-gray-700 font-medium">{s.title}</span>
+                </nav>
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{s.title}</h1>
                 <p className="text-gray-500 mt-4 max-w-2xl text-lg">{s.desc}</p>
             </div></section>
