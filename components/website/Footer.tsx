@@ -108,7 +108,7 @@ export default function Footer() {
                 {/* Bottom */}
                 <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-gray-500">
                     <span>© {new Date().getFullYear()} R.C. Eye & Dental Hospital. All rights reserved.</span>
-                    <span>Built by <a href="#" className="text-gray-300 hover:text-white">Nitro Media</a></span>
+                    <span>Crafted by <a href="#" className="text-gray-300 hover:text-white">Abhishek Technologies</a></span>
                 </div>
             </div>
         </footer>
