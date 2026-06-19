@@ -123,6 +123,30 @@ export default function BlogPage() {
                     </div>
                 </div>
 
+                {/* SEO Score - Full Width */}
+                <Card className={`border-2 ${seo.score >= 70 ? "border-green-200" : seo.score >= 40 ? "border-amber-200" : "border-red-200"}`}>
+                    <CardContent className="p-5">
+                        <div className="flex items-center gap-6 mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className={`text-3xl font-bold ${seo.score >= 70 ? "text-green-600" : seo.score >= 40 ? "text-amber-600" : "text-red-600"}`}>{seo.score}%</div>
+                                <div><div className="text-sm font-semibold text-gray-900">SEO Score</div><div className="text-xs text-gray-500">{seo.passed}/{seo.total} checks passed</div></div>
+                            </div>
+                            <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full transition-all ${seo.score >= 70 ? "bg-green-500" : seo.score >= 40 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${seo.score}%` }} />
+                            </div>
+                            <Input value={form.focusKeyword} onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })} placeholder="Focus keyword..." className="w-56 h-9 text-xs" />
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                            {seo.checks.map((c) => (
+                                <div key={c.label} className={`flex items-center gap-2 text-xs px-3 py-2 rounded-lg ${c.pass ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+                                    {c.pass ? <CheckCircle className="w-3 h-3 flex-shrink-0" /> : <XCircle className="w-3 h-3 flex-shrink-0" />}
+                                    <span className="truncate">{c.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+
                 <div className="grid lg:grid-cols-3 gap-5">
                     <div className="lg:col-span-2 space-y-4">
                         {/* Title */}
@@ -154,39 +178,6 @@ export default function BlogPage() {
 
                     {/* Sidebar */}
                     <div className="space-y-4">
-                        {/* SEO Score */}
-                        <Card className={`border-2 ${seo.score >= 70 ? "border-green-200" : seo.score >= 40 ? "border-amber-200" : "border-red-200"}`}>
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm flex items-center justify-between">
-                                    SEO Score
-                                    <span className={`text-lg font-bold ${seo.score >= 70 ? "text-green-600" : seo.score >= 40 ? "text-amber-600" : "text-red-600"}`}>{seo.score}%</span>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-1.5">
-                                <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-3">
-                                    <div className={`h-full rounded-full transition-all ${seo.score >= 70 ? "bg-green-500" : seo.score >= 40 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${seo.score}%` }} />
-                                </div>
-                                {seo.checks.map((c) => (
-                                    <div key={c.label} className="flex items-start gap-2 text-xs">
-                                        {c.pass ? <CheckCircle className="w-3.5 h-3.5 text-green-500 mt-0.5 flex-shrink-0" /> : <XCircle className="w-3.5 h-3.5 text-red-400 mt-0.5 flex-shrink-0" />}
-                                        <div>
-                                            <span className={c.pass ? "text-gray-600" : "text-gray-900 font-medium"}>{c.label}</span>
-                                            {!c.pass && <p className="text-gray-400 text-[10px] mt-0.5">{c.tip}</p>}
-                                        </div>
-                                    </div>
-                                ))}
-                            </CardContent>
-                        </Card>
-
-                        {/* Focus Keyword */}
-                        <Card>
-                            <CardHeader className="pb-2"><CardTitle className="text-sm">Focus Keyword</CardTitle></CardHeader>
-                            <CardContent>
-                                <Input value={form.focusKeyword} onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })} placeholder="e.g. cataract surgery bijnor" />
-                                <p className="text-[10px] text-gray-400 mt-1">Primary keyword you want to rank for</p>
-                            </CardContent>
-                        </Card>
-
                         {/* Publish */}
                         <Card>
                             <CardContent className="p-4">
