@@ -44,9 +44,29 @@ export default function BlogPage() {
     const [showCreate, setShowCreate] = useState(false);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [aiGenerating, setAiGenerating] = useState(false);
+    const [showAiModal, setShowAiModal] = useState(false);
+    const [aiTopic, setAiTopic] = useState("");
+    const [aiDesc, setAiDesc] = useState("");
+    const [imageSuggestions, setImageSuggestions] = useState<{ placement: string; description: string }[]>([]);
     const contentRef = useRef<HTMLTextAreaElement>(null);
 
     const [form, setForm] = useState({ title: "", excerpt: "", content: "", coverImage: "", author: "Dr. Rachit Agarwal", category: "", tags: "", metaTitle: "", metaDesc: "", isPublished: false, focusKeyword: "" });
+
+    async function generateWithAI() {
+        if (!aiTopic) return toast.error("Enter a topic");
+        setAiGenerating(true);
+        try {
+            const res = await fetch("/api/admin/ai-generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic: aiTopic, focusKeyword: form.focusKeyword || aiTopic, description: aiDesc }) });
+            if (!res.ok) throw new Error("Failed");
+            const data = await res.json();
+            setForm({ ...form, title: data.title || form.title, excerpt: data.excerpt || "", content: data.content || "", metaTitle: data.metaTitle || "", metaDesc: data.metaDesc || "", category: data.category || "", tags: data.tags || "" });
+            if (data.imageSuggestions) setImageSuggestions(data.imageSuggestions);
+            setShowAiModal(false); setAiTopic(""); setAiDesc("");
+            toast.success("Article generated! Review and edit before publishing.");
+        } catch { toast.error("AI generation failed. Try again."); }
+        setAiGenerating(false);
+    }
 
     useEffect(() => { fetch("/api/admin/blog").then(r => r.json()).then(d => { setPosts(d.posts || []); setLoading(false); }).catch(() => setLoading(false)); }, []);
 
@@ -118,10 +138,69 @@ export default function BlogPage() {
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-bold tracking-tight">{editingPost ? "Edit Article" : "New Article"}</h1>
                     <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => setShowAiModal(true)} className="text-purple-600 border-purple-200 hover:bg-purple-50">
+                            <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+                            AI Generate
+                        </Button>
                         <Button variant="outline" size="sm" onClick={() => setShowCreate(false)}><X className="w-3.5 h-3.5 mr-1" /> Cancel</Button>
                         <Button size="sm" onClick={savePost} disabled={saving} className="bg-[#1a5f3a] hover:bg-[#28845a]">{saving ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}{editingPost ? "Update" : "Save"}</Button>
                     </div>
                 </div>
+
+                {/* AI Generate Modal */}
+                {showAiModal && (
+                    <Card className="border-purple-200 bg-purple-50/30">
+                        <CardContent className="p-5">
+                            <div className="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                                        <svg className="w-4 h-4 text-purple-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+                                        Generate Article with AI
+                                    </h3>
+                                    <p className="text-xs text-gray-500 mt-1">Describe what you want and AI will write a full SEO-optimized article</p>
+                                </div>
+                                <button onClick={() => setShowAiModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
+                            </div>
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="text-xs font-medium text-gray-600">Topic / Title *</label>
+                                    <Input value={aiTopic} onChange={(e) => setAiTopic(e.target.value)} placeholder="e.g. What is Cataract Surgery? Complete Guide for Patients" className="mt-1" />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-medium text-gray-600">Focus Keyword</label>
+                                    <Input value={form.focusKeyword} onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })} placeholder="e.g. cataract surgery bijnor" className="mt-1" />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-medium text-gray-600">Additional instructions (optional)</label>
+                                    <textarea value={aiDesc} onChange={(e) => setAiDesc(e.target.value)} placeholder="Any specific points to cover, tone, target audience..." rows={2} className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-purple-400 resize-none" />
+                                </div>
+                                <Button onClick={generateWithAI} disabled={aiGenerating} className="w-full bg-purple-600 hover:bg-purple-700">
+                                    {aiGenerating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating (15-30 sec)...</> : "🤖 Generate Full Article"}
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
+
+                {/* Image Suggestions (shown after AI generation) */}
+                {imageSuggestions.length > 0 && (
+                    <Card className="border-blue-200 bg-blue-50/30">
+                        <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-sm font-semibold text-gray-900 flex items-center gap-1.5"><ImageIcon className="w-3.5 h-3.5 text-blue-600" /> Image Suggestions</h4>
+                                <button onClick={() => setImageSuggestions([])} className="text-xs text-gray-400 hover:text-gray-600">Dismiss</button>
+                            </div>
+                            <div className="grid sm:grid-cols-3 gap-2">
+                                {imageSuggestions.map((s, i) => (
+                                    <div key={i} className="bg-white rounded-lg p-3 border border-blue-100 text-xs">
+                                        <div className="font-medium text-blue-700 mb-1">{s.placement}</div>
+                                        <div className="text-gray-600">{s.description}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
 
                 {/* SEO Score - Full Width */}
                 <Card className={`border-2 ${seo.score >= 70 ? "border-green-200" : seo.score >= 40 ? "border-amber-200" : "border-red-200"}`}>
