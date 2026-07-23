@@ -25,14 +25,20 @@ async function authorizeUser(email: string, password: string) {
                 .where(eq(adminUsers.email, email))
                 .limit(1);
 
-            if (!user[0]) return null;
+            if (!user[0]) {
+                console.log("[Auth] No user found for email:", email);
+                return null;
+            }
 
             const valid = await bcrypt.compare(password, user[0].password);
-            if (!valid) return null;
+            if (!valid) {
+                console.log("[Auth] Password mismatch for:", email);
+                return null;
+            }
 
             return { id: String(user[0].id), email: user[0].email, name: user[0].name };
         } catch (e) {
-            console.error("DB auth failed, falling back to dev mode:", e);
+            console.error("[Auth] DB auth error:", e);
         }
     }
 
@@ -46,6 +52,8 @@ async function authorizeUser(email: string, password: string) {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    trustHost: true,
+    secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "fallback-secret-for-dev-only",
     providers: [
         Credentials({
             name: "credentials",
