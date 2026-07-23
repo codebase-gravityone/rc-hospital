@@ -9,7 +9,7 @@ export default function AdminHeader() {
 
     return (
         <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <div>
+            <div className="pl-10 md:pl-0">
                 <h1 className="text-gray-800 font-semibold text-lg">Admin Dashboard</h1>
                 <p className="text-gray-500 text-xs">R.C. Eye & Dental Hospital, Bijnor</p>
             </div>
