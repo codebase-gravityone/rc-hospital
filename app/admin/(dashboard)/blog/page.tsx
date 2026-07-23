@@ -126,42 +126,44 @@ export default function BlogPage() {
         return (
             <div className="space-y-5">
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <h1 className="text-lg font-semibold text-slate-800">{editingPost ? "Edit Article" : "New Article"}</h1>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                         <Button variant="ghost" size="sm" onClick={() => setShowCreate(false)} className="text-slate-500 hover:text-slate-700 hover:bg-slate-100">
-                            <X className="w-4 h-4 mr-1" /> Cancel
+                            <X className="w-4 h-4 sm:mr-1" /> <span className="hidden sm:inline">Cancel</span>
                         </Button>
                         <Button variant="outline" size="sm" onClick={() => savePost(false)} disabled={saving} className="border-slate-200 hover:bg-slate-50">
-                            {saving ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />} Save Draft
+                            {saving ? <Loader2 className="w-3.5 h-3.5 sm:mr-1 animate-spin" /> : <Save className="w-3.5 h-3.5 sm:mr-1" />} <span className="hidden sm:inline">Save Draft</span>
                         </Button>
                         <Button variant="outline" size="sm" onClick={previewPost} className="border-slate-200 hover:bg-slate-50">
-                            <Eye className="w-3.5 h-3.5 mr-1" /> Preview
+                            <Eye className="w-3.5 h-3.5 sm:mr-1" /> <span className="hidden sm:inline">Preview</span>
                         </Button>
                         <Button size="sm" onClick={() => savePost(true)} disabled={saving} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-                            {saving ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : <Globe className="w-3.5 h-3.5 mr-1" />} Publish Live
+                            {saving ? <Loader2 className="w-3.5 h-3.5 sm:mr-1 animate-spin" /> : <Globe className="w-3.5 h-3.5 sm:mr-1" />} <span className="hidden sm:inline">Publish Live</span><span className="sm:hidden">Publish</span>
                         </Button>
                     </div>
                 </div>
 
                 {/* SEO Score Bar */}
-                <div className="bg-white border border-slate-200 rounded-md p-4">
-                    <div className="flex items-center gap-4 mb-3">
-                        <div className={`text-2xl font-bold ${seo.score >= 70 ? "text-indigo-600" : seo.score >= 40 ? "text-amber-500" : "text-rose-500"}`}>{seo.score}%</div>
-                        <div className="flex-1">
-                            <div className="flex items-center justify-between mb-1">
-                                <span className="text-xs font-medium text-slate-700">SEO Score</span>
-                                <span className="text-[11px] text-slate-400">{seo.passed}/{seo.total} passed</span>
-                            </div>
-                            <div className="h-1.5 bg-slate-100 rounded-sm overflow-hidden">
-                                <div className={`h-full transition-all rounded-sm ${seo.score >= 70 ? "bg-indigo-500" : seo.score >= 40 ? "bg-amber-400" : "bg-rose-400"}`} style={{ width: `${seo.score}%` }} />
+                <div className="bg-white border border-slate-200 rounded-md p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+                        <div className="flex items-center gap-3">
+                            <div className={`text-2xl font-bold ${seo.score >= 70 ? "text-indigo-600" : seo.score >= 40 ? "text-amber-500" : "text-rose-500"}`}>{seo.score}%</div>
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs font-medium text-slate-700">SEO Score</span>
+                                    <span className="text-[11px] text-slate-400">{seo.passed}/{seo.total}</span>
+                                </div>
+                                <div className="h-1.5 bg-slate-100 rounded-sm overflow-hidden w-32 sm:w-48">
+                                    <div className={`h-full transition-all rounded-sm ${seo.score >= 70 ? "bg-indigo-500" : seo.score >= 40 ? "bg-amber-400" : "bg-rose-400"}`} style={{ width: `${seo.score}%` }} />
+                                </div>
                             </div>
                         </div>
-                        <Input value={form.focusKeyword} onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })} placeholder="Focus keyword..." className="w-48 h-8 text-xs border-slate-200 rounded-md" />
+                        <Input value={form.focusKeyword} onChange={(e) => setForm({ ...form, focusKeyword: e.target.value })} placeholder="Focus keyword..." className="w-full sm:w-48 h-8 text-xs border-slate-200 rounded-md" />
                     </div>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-1.5">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5">
                         {seo.checks.map((c) => (
-                            <div key={c.label} className={`flex items-center gap-1.5 text-[11px] px-2 py-1.5 rounded-sm ${c.pass ? "bg-indigo-50 text-indigo-700" : "bg-slate-50 text-slate-400"}`}>
+                            <div key={c.label} className={`flex items-center gap-1.5 text-[10px] sm:text-[11px] px-2 py-1.5 rounded-sm ${c.pass ? "bg-indigo-50 text-indigo-700" : "bg-slate-50 text-slate-400"}`}>
                                 {c.pass ? <CheckCircle className="w-3 h-3 flex-shrink-0" /> : <XCircle className="w-3 h-3 flex-shrink-0" />}
                                 <span className="truncate">{c.label}</span>
                             </div>
@@ -205,16 +207,16 @@ export default function BlogPage() {
                                 contentEditable
                                 suppressContentEditableWarning
                                 onInput={handleContentInput}
-                                className="w-full px-4 py-3 text-sm leading-relaxed min-h-[420px] outline-none prose prose-sm prose-slate max-w-none"
+                                className="w-full px-4 py-3 text-sm leading-relaxed min-h-[280px] sm:min-h-[420px] outline-none prose prose-sm prose-slate max-w-none"
                                 style={{ whiteSpace: "pre-wrap" }}
                                 dangerouslySetInnerHTML={{ __html: form.content }}
                             />
                         </div>
 
                         {/* SEO Meta + Google Preview (below content) */}
-                        <div className="border border-slate-200 rounded-md p-4 bg-white space-y-4">
+                        <div className="border border-slate-200 rounded-md p-3 sm:p-4 bg-white space-y-4">
                             <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2"><Globe className="w-4 h-4 text-indigo-500" /> SEO & Meta</h3>
-                            <div className="grid sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-[11px] font-medium text-slate-500 mb-1 block">Meta Title</label>
                                     <Input value={form.metaTitle} onChange={(e) => setForm({ ...form, metaTitle: e.target.value })} placeholder="50-60 characters recommended" className="h-9 text-sm border-slate-200 rounded-md" />
@@ -311,12 +313,12 @@ export default function BlogPage() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                     <h1 className="text-xl font-semibold text-slate-800">Blog & Content</h1>
-                    <p className="text-slate-400 text-sm mt-0.5">Manage articles and grow organic traffic</p>
+                    <p className="text-slate-400 text-xs sm:text-sm mt-0.5">Manage articles and grow organic traffic</p>
                 </div>
-                <Button onClick={openCreate} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md shadow-sm">
+                <Button onClick={openCreate} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md shadow-sm w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-1.5" /> New Article
                 </Button>
             </div>
@@ -384,7 +386,7 @@ export default function BlogPage() {
             {/* Chart + Categories */}
             <div className="grid lg:grid-cols-3 gap-4">
                 {/* Publishing Chart */}
-                <div className="lg:col-span-2 bg-white border border-slate-200 rounded-md p-5">
+                <div className="lg:col-span-2 bg-white border border-slate-200 rounded-md p-4 sm:p-5">
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h3 className="text-sm font-semibold text-slate-700">Publishing Activity</h3>
@@ -392,7 +394,7 @@ export default function BlogPage() {
                         </div>
                         <BarChart3 className="w-4 h-4 text-slate-300" />
                     </div>
-                    <div className="flex items-end gap-4 h-28">
+                    <div className="flex items-end gap-2 sm:gap-4 h-24 sm:h-28">
                         {monthlyData.map((d) => {
                             const maxVal = Math.max(...monthlyData.map(m => m.posts), 1);
                             const height = (d.posts / maxVal) * 100;
@@ -438,20 +440,20 @@ export default function BlogPage() {
 
             {/* Articles Table */}
             <div className="bg-white border border-slate-200 rounded-md">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-slate-100">
-                    <div className="relative flex-1 max-w-sm">
+                <div className="flex flex-col gap-3 p-3 sm:p-4 border-b border-slate-100">
+                    <div className="relative w-full sm:max-w-sm">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
                         <Input placeholder="Search articles..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 h-9 border-slate-200 rounded-md text-sm" />
                     </div>
                     <Tabs value={filter} onValueChange={setFilter}>
-                        <TabsList className="h-8 bg-slate-100 rounded-md">
-                            <TabsTrigger value="all" className="text-[11px] px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm">All ({posts.length})</TabsTrigger>
-                            <TabsTrigger value="published" className="text-[11px] px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm">Published ({publishedCount})</TabsTrigger>
-                            <TabsTrigger value="draft" className="text-[11px] px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm">Drafts ({draftCount})</TabsTrigger>
+                        <TabsList className="h-8 bg-slate-100 rounded-md w-full sm:w-auto">
+                            <TabsTrigger value="all" className="text-[11px] px-2 sm:px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm flex-1 sm:flex-none">All ({posts.length})</TabsTrigger>
+                            <TabsTrigger value="published" className="text-[11px] px-2 sm:px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm flex-1 sm:flex-none">Published ({publishedCount})</TabsTrigger>
+                            <TabsTrigger value="draft" className="text-[11px] px-2 sm:px-3 rounded-sm data-[state=active]:bg-white data-[state=active]:shadow-sm flex-1 sm:flex-none">Drafts ({draftCount})</TabsTrigger>
                         </TabsList>
                     </Tabs>
                 </div>
-                <div>
+                <div className="overflow-x-auto">
                     {filtered.length === 0 ? (
                         <div className="text-center py-16">
                             <FileText className="w-10 h-10 mx-auto mb-3 text-slate-200" />
