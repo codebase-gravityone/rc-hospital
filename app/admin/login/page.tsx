@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LogIn, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState("");
@@ -32,13 +33,7 @@ export default function AdminLoginPage() {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-3 mb-4">
-                        <svg width="48" height="48" viewBox="0 0 50 50" fill="none">
-                            <circle cx="25" cy="25" r="24" fill="#0D2748" stroke="#C9922A" strokeWidth="2" />
-                            <ellipse cx="25" cy="25" rx="14" ry="9" stroke="white" strokeWidth="2" fill="none" />
-                            <circle cx="25" cy="25" r="5" fill="white" />
-                            <circle cx="25" cy="25" r="2.5" fill="#C9922A" />
-                            <path d="M18 13 L25 7 L32 13" stroke="#C9922A" strokeWidth="1.5" fill="none" />
-                        </svg>
+                        <Image src="/Logo_rc.png" alt="R.C. Eye & Dental Hospital" width={48} height={48} className="rounded-xl" />
                         <div className="text-left">
                             <div className="font-playfair text-white font-bold text-lg leading-tight">R.C. Eye & Dental</div>
                             <div className="text-[#c9922a] text-xs font-bold tracking-[2px] uppercase">Admin Panel</div>

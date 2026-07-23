@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Menu, X, Phone, ChevronDown, ArrowRight, Eye, Zap, Activity, Shield, Circle, Baby, Smile } from "lucide-react";
 import { SITE } from "@/lib/siteData";
 
@@ -56,9 +57,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-[#1a5f3a] flex items-center justify-center">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="10" ry="6" stroke="white" strokeWidth="2" /><circle cx="12" cy="12" r="3" fill="white" /></svg>
-                    </div>
+                    <Image src="/Logo_rc.png" alt="R.C. Eye & Dental Hospital" width={44} height={44} className="rounded-xl" />
                     <div>
                         <span className={`font-semibold text-[15px] tracking-tight ${solid ? "text-white" : "text-white"}`}>R.C. Eye & Dental</span>
                         <span className={`block text-[10px] font-medium tracking-wider uppercase ${solid ? "text-white/50" : "text-white/50"}`}>Bijnor</span>

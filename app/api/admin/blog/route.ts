@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const body = await req.json();
-    const slug = body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
+    const slug = body.slug || body.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
     const result = await db.insert(blogPosts).values({ ...body, slug }).returning();
     return NextResponse.json({ post: result[0] }, { status: 201 });
 }

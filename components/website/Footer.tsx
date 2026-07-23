@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SITE } from "@/lib/siteData";
 
 export default function Footer() {
@@ -12,9 +13,7 @@ export default function Footer() {
                         {/* Brand */}
                         <div>
                             <div className="flex items-center gap-2.5 mb-5">
-                                <div className="w-9 h-9 rounded-lg bg-[#1a5f3a] flex items-center justify-center">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="10" ry="6" stroke="white" strokeWidth="2" /><circle cx="12" cy="12" r="3" fill="white" /></svg>
-                                </div>
+                                <Image src="/Logo_rc.png" alt="R.C. Eye & Dental Hospital" width={36} height={36} className="rounded-lg" />
                                 <span className="font-semibold text-sm">R.C. Eye & Dental</span>
                             </div>
                             <p className="text-gray-400 text-sm leading-relaxed mb-1">Opp. Vaishno Vihar, Bairaj Road,</p>
